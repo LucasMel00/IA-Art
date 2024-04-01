@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "104547839941",
+    "project_id": "ia-art-quiz",
+    "storage_bucket": "ia-art-quiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104547839941:android:df95e2379d559ca557a5ac",
+        "android_client_info": {
+          "package_name": "com.gp4.ia_art"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFzOTwvpwI37BgOMtB9GgyDlArUxKXSrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
