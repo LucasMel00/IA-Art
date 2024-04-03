@@ -13,7 +13,7 @@ class _AdminLoginState extends State<AdminLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 95, 102, 141),
+      backgroundColor: Color(0xff080d25),
       body: Padding(
         padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
         child: Container(
@@ -22,15 +22,15 @@ class _AdminLoginState extends State<AdminLogin> {
               Row(
                 children: [
                   Container(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(40),
-                              bottomLeft: Radius.circular(40))),
+                              bottomRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10))),
                       child: Center(
                           child:
                               Icon(Icons.arrow_back_ios, color: Colors.white))),
-                  SizedBox(width: 95),
+                  SizedBox(width: 55),
                   Text("Admin Login",
                       style: TextStyle(
                           color: Colors.white,
@@ -41,7 +41,7 @@ class _AdminLoginState extends State<AdminLogin> {
               SizedBox(height: 20),
               Expanded(
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.only(bottom: 30),
                   decoration: BoxDecoration(
@@ -91,21 +91,29 @@ class _AdminLoginState extends State<AdminLogin> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 20,
-                          left: 20,
-                          right: 20,
-                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 95, 102, 141),
+                            backgroundColor: Color(0xff000000),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: Text("Login"),
+                          child: Center(
+                              child: Text(
+                            "Login",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          )),
                         ),
                       ),
                     ],

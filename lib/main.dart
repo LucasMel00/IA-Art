@@ -1,10 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ia_art/Admin/admin_login.dart';
+import 'package:ia_art/pages/home.dart';
+import 'package:ia_art/pages/question.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() {
   runApp(const MainApp());
 }
 
