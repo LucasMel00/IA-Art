@@ -33,8 +33,8 @@ class _HomeState extends State<Home> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(60),
-                        child: Image.asset(
-                          "images/lucas.jpeg",
+                        child: Image.network(
+                          "https://raw.githubusercontent.com/LucasMel00/IA_Art_aoo/main/images/lucas.jpeg",
                           width: 50,
                           height: 50,
                           fit: BoxFit.cover,
@@ -69,8 +69,11 @@ class _HomeState extends State<Home> {
                             topLeft: Radius.circular(30),
                             bottomLeft: Radius.circular(30),
                           ),
-                          child: Image.asset("images/4.JPG",
-                              width: 150, height: 200, fit: BoxFit.cover)),
+                          child: Image.network(
+                              "https://raw.githubusercontent.com/LucasMel00/IA_Art_aoo/main/images/4.JPG",
+                              width: 150,
+                              height: 200,
+                              fit: BoxFit.cover)),
                       SizedBox(width: 30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

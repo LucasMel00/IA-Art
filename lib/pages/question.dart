@@ -63,7 +63,8 @@ class _QuestionState extends State<Question> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.asset("images/4.JPG",
+                          child: Image.network(
+                              "https://raw.githubusercontent.com/LucasMel00/IA_Art_aoo/main/images/4.JPG",
                               height: 300,
                               width: MediaQuery.of(context).size.width,
                               fit: BoxFit.cover),
