@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ia_art/Admin/add_quiz.dart';
 import 'package:ia_art/Admin/admin_login.dart';
 import 'package:ia_art/firebase_options.dart';
 import 'package:ia_art/pages/home.dart';
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: AdminLogin(),
+      home: Home(),
       debugShowCheckedModeBanner: false,
     );
   }

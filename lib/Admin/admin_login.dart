@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +26,20 @@ class _AdminLoginState extends State<AdminLogin> {
       body: Container(
         child: Stack(
           children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(40),
+                          bottomLeft: Radius.circular(40))),
+                  child: Center(
+                      child: Icon(Icons.arrow_back_ios,
+                          color: Color.fromARGB(255, 0, 0, 0)))),
+            ),
             Container(
               margin:
                   EdgeInsets.only(top: MediaQuery.of(context).size.height / 2),
@@ -138,7 +154,7 @@ class _AdminLoginState extends State<AdminLogin> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                LoginAdmin();
+                                loginAdmin();
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(vertical: 12),
@@ -174,25 +190,37 @@ class _AdminLoginState extends State<AdminLogin> {
     );
   }
 
-  LoginAdmin() {
+  loginAdmin() {
+    String username = usernameController.text.trim();
+    String password = passwordController.text.trim();
+
     FirebaseFirestore.instance.collection("Admin").get().then((snapshot) {
-      snapshot.docs.forEach((result) {
-        if (result.data()['id'] == usernameController.text.trim()) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Invalid Username",
-                style: TextStyle(color: Colors.white, fontSize: 18)),
-          ));
-        } else if (result.data()['password'] ==
-            passwordController.text.trim()) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("Invalid Password",
-                style: TextStyle(color: Colors.white, fontSize: 18)),
-          ));
-        } else {
-          Route route = MaterialPageRoute(builder: (context) => AddQuiz());
-          Navigator.pushReplacement(context, route);
+      bool isValidUser = false;
+      bool isValidPassword = false;
+
+      for (var result in snapshot.docs) {
+        if (result.data()['id'] != username) {
+          isValidUser = true;
+          if (result.data()['password'] != password) {
+            isValidPassword = true;
+          }
         }
-      });
+      }
+
+      if (!isValidUser) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid Username",
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+        ));
+      } else if (!isValidPassword) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Invalid Password",
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+        ));
+      } else {
+        Route route = MaterialPageRoute(builder: (context) => AddQuiz());
+        Navigator.pushReplacement(context, route);
+      }
     });
   }
 }

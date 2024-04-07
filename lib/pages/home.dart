@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
+import "package:ia_art/Admin/admin_login.dart";
+import "package:ia_art/pages/question.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -18,41 +22,47 @@ class _HomeState extends State<Home> {
           children: [
             Stack(
               children: [
-                Container(
-                  height: 220,
-                  padding: EdgeInsets.only(left: 20, top: 50),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF2a2b31),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: Image.network(
-                          "https://raw.githubusercontent.com/LucasMel00/IA_Art_aoo/main/images/lucas.jpeg",
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AdminLogin()));
+                  },
+                  child: Container(
+                    height: 220,
+                    padding: EdgeInsets.only(left: 20, top: 50),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF2a2b31),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
-                      SizedBox(width: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Lucas Melo",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(60),
+                          child: Image.network(
+                            "https://static.vecteezy.com/system/resources/previews/019/879/186/large_2x/user-icon-on-transparent-background-free-png.png",
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 20),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "User",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -116,39 +126,49 @@ class _HomeState extends State<Home> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 20, top: 20),
-                    width: 300,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF2a2b31),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black54,
-                            blurRadius: 20,
-                            offset: Offset(5, 10),
-                            spreadRadius: 0.1,
-                            blurStyle: BlurStyle.normal),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.art_track,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                        Text(
-                          "IA Art",
-                          style: TextStyle(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Question(
+                                    category: "Quiz IA ART",
+                                  )));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 20, top: 20),
+                      width: 300,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF2a2b31),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.black54,
+                              blurRadius: 20,
+                              offset: Offset(5, 10),
+                              spreadRadius: 0.1,
+                              blurStyle: BlurStyle.normal),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.art_track,
                             color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                            size: 50,
                           ),
-                        ),
-                      ],
+                          Text(
+                            "IA Art",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
