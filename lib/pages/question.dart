@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ia_art/pages/home.dart';
 import 'package:ia_art/service/database.dart';
 
 class Question extends StatefulWidget {
@@ -13,20 +12,22 @@ class Question extends StatefulWidget {
 
 class _QuestionState extends State<Question> {
   bool show = false;
-  getontheload() async {
-    QuizStream = await DatabaseMethods().getCategoryQuiz(widget.category);
+  int score = 0; // Variável para rastrear a pontuação
 
+  getOnTheLoad() async {
+    QuizStream = await DatabaseMethods().getCategoryQuiz(widget.category);
     setState(() {});
   }
 
   @override
   void initState() {
-    getontheload();
+    getOnTheLoad();
     super.initState();
   }
 
   Stream? QuizStream;
   PageController controller = PageController();
+  int currentPageIndex = 0;
 
   Widget allQuiz() {
     return StreamBuilder(
@@ -36,6 +37,11 @@ class _QuestionState extends State<Question> {
               ? PageView.builder(
                   controller: controller,
                   itemCount: snapshot.data.size,
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPageIndex = index;
+                    });
+                  },
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
                     return Expanded(
@@ -45,12 +51,7 @@ class _QuestionState extends State<Question> {
                         margin: EdgeInsets.only(bottom: 30),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 234, 234, 238),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                          ),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         child: Column(
                           children: [
@@ -63,10 +64,14 @@ class _QuestionState extends State<Question> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
-                                child: Image.network(ds["Image"],
-                                    height: 300,
-                                    width: MediaQuery.of(context).size.width,
-                                    fit: BoxFit.cover),
+                                child: Image.network(
+                                  ds["Image"],
+                                  height: MediaQuery.of(context).size.height *
+                                      0.4, // Ajuste a altura conforme necessário
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit
+                                      .cover, // Ajuste para cobrir toda a área
+                                ),
                               ),
                             ),
                             Padding(
@@ -74,49 +79,66 @@ class _QuestionState extends State<Question> {
                               child: GestureDetector(
                                 onTap: () {
                                   show = true;
+                                  if (ds["quizAnswerTrue"] ==
+                                      ds["quizAnswer1"]) {
+                                    setState(() {
+                                      score++;
+                                    });
+                                  }
                                   setState(() {});
+                                  Future.delayed(Duration(milliseconds: 1000),
+                                      () {
+                                    if (currentPageIndex ==
+                                        snapshot.data.size - 1) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FinalScreen(score: score),
+                                        ),
+                                      );
+                                    } else {
+                                      controller.nextPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                      );
+                                      setState(() {
+                                        show = false;
+                                      });
+                                    }
+                                  });
                                 },
-                                child: show
-                                    ? Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        padding: EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: ds["quizAnswerTrue"] ==
-                                                      ds["quizAnswer1"]
-                                                  ? Colors.green
-                                                  : Colors.red,
-                                              width: 1),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Text(ds["quizAnswer1"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      )
-                                    : Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        padding: EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 96, 96, 96),
-                                              width: 1.5),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Text(ds["quizAnswer1"],
-                                            style: TextStyle(
-                                              color: const Color.fromARGB(
-                                                  255, 85, 85, 85),
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ))),
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 300),
+                                  width: MediaQuery.of(context).size.width,
+                                  padding: EdgeInsets.all(15),
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: show &&
+                                              ds["quizAnswerTrue"] ==
+                                                  ds["quizAnswer1"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 96, 96, 96),
+                                      width: 1.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    ds["quizAnswer1"],
+                                    style: TextStyle(
+                                      color: show &&
+                                              ds["quizAnswerTrue"] ==
+                                                  ds["quizAnswer1"]
+                                          ? Colors.black
+                                          : const Color.fromARGB(
+                                              255, 85, 85, 85),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             Padding(
@@ -124,7 +146,34 @@ class _QuestionState extends State<Question> {
                               child: GestureDetector(
                                 onTap: () {
                                   show = true;
+                                  if (ds["quizAnswerTrue"] ==
+                                      ds["quizAnswer2"]) {
+                                    setState(() {
+                                      score++;
+                                    });
+                                  }
                                   setState(() {});
+                                  Future.delayed(Duration(milliseconds: 1000),
+                                      () {
+                                    if (currentPageIndex ==
+                                        snapshot.data.size - 1) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FinalScreen(score: score),
+                                        ),
+                                      );
+                                    } else {
+                                      controller.nextPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.easeIn,
+                                      );
+                                      setState(() {
+                                        show = false;
+                                      });
+                                    }
+                                  });
                                 },
                                 child: show
                                     ? Container(
@@ -167,36 +216,6 @@ class _QuestionState extends State<Question> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
                                             ))),
-                              ),
-                            ),
-                            SizedBox(height: 40),
-                            GestureDetector(
-                              onTap: () {
-                                controller.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.easeIn);
-                                setState(() {
-                                  show = false;
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(15),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 0, 0, 0),
-                                          width: 1.5),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Icon(
-                                        Icons.arrow_forward_ios_outlined,
-                                        color:
-                                            const Color.fromARGB(255, 0, 0, 0)),
-                                  ),
-                                ],
                               ),
                             ),
                           ],
@@ -245,6 +264,45 @@ class _QuestionState extends State<Question> {
               Expanded(child: allQuiz()),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class FinalScreen extends StatelessWidget {
+  final int score;
+
+  const FinalScreen({required this.score});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Resultado do Quiz'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Parabéns, você concluiu o quiz!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Sua pontuação final foi de: $score acertos',
+              style: TextStyle(fontSize: 20),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+              },
+              child: Text('Fechar'),
+            ),
+          ],
         ),
       ),
     );

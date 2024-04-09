@@ -190,37 +190,30 @@ class _AdminLoginState extends State<AdminLogin> {
     );
   }
 
-  loginAdmin() {
+  void loginAdmin() {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    FirebaseFirestore.instance.collection("Admin").get().then((snapshot) {
-      bool isValidUser = false;
-      bool isValidPassword = false;
+    // Login e senha padrão
+    String defaultUsername = "admin";
+    String defaultPassword = "admin";
 
-      for (var result in snapshot.docs) {
-        if (result.data()['id'] != username) {
-          isValidUser = true;
-          if (result.data()['password'] != password) {
-            isValidPassword = true;
-          }
-        }
-      }
-
-      if (!isValidUser) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid Username",
-              style: TextStyle(color: Colors.white, fontSize: 18)),
-        ));
-      } else if (!isValidPassword) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Invalid Password",
-              style: TextStyle(color: Colors.white, fontSize: 18)),
-        ));
-      } else {
-        Route route = MaterialPageRoute(builder: (context) => AddQuiz());
-        Navigator.pushReplacement(context, route);
-      }
-    });
+    if (username == defaultUsername && password == defaultPassword) {
+      // Se as credenciais coincidirem com o padrão, redirecione para a tela AddQuiz
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AddQuiz()),
+      );
+    } else {
+      // Caso contrário, exiba uma mensagem de erro
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Credenciais inválidas",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ),
+      );
+    }
   }
 }
